@@ -1,0 +1,14 @@
+<odoo>
+    <record id="inherited_buyer_view_form" model="ir.ui.view">
+        <field name="name">inherited.buyer.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='create_company']" position="after">
+                <group>    
+                    <field name="is_buyer" string="Buyer"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

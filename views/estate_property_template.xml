@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="static_template" name="static template">
+        <t t-call="website.layout">
+        <h4><strong>welcome to real estate STATIC website</strong></h4>
+        </t>
+    </template>
+
+    <template id="dynamic_template">
+        <t t-call="website.layout">
+        <div><t t-out="SomeAdditionalData"/></div>
+        <div class="table">
+            <table>
+                <thead>
+                    <th>No.</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>State</th>
+                </thead>
+                <tbody>
+                    <t t-set="sequence" t-value="0"/>
+                    <t t-foreach="properties" t-as="property">
+                        <t t-set="sequence" t-value="sequence + 1"/>
+                        <!-- <tr t-att-class="sequence % 2 == 0 and 'o_even' or ''"> -->
+                        <tr t-attf-style="font-weight: bold;#{sequence % 2 == 0 and 'background: grey;' or ''}">
+                            <td><t t-out="sequence" /></td>
+                            
+                            <td>
+                                <a t-attf-href="/property/#{property.id}">
+                                    <t t-out="property.name" />
+                                </a>
+                            </td>
+                            <td>
+                                <t t-if="property.description" t-out="property.description" />
+                                <t t-else="">No Description Available</t>
+                            </td>
+                            <td><span t-field="property.state"/></td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </div>
+        </t>
+    </template>
+
+    <template id="hello_template_user" name="hello template user">
+            <center><h4><strong>Hello <t t-out="user.name"/></strong></h4></center>
+            <t t-call="Real_estate.dynamic_template">
+            </t>
+    </template>
+
+
+
+    <template id="property_details" name="property_details">
+        <div t-call="website.layout">
+            <div class="container">
+                <div class="row">
+                    <div class="col-4">
+                        <div t-attf-style="padding-top: 50%; background-image: url(/Real_estate/static/image/#{property.image}); background-size: cover; background-position:center"/>
+                        <div>
+                            <div>Property State</div>
+                            <div t-field="property.state"/>
+                        </div>
+                    </div>
+                    <div class="col-8 o_property_details">
+                        <div class="text-center font-weight-bold"><span t-field="property.name"/></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+</odoo>
