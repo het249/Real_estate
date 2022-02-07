@@ -5,7 +5,6 @@
     'author': "Het Patel",
     'category': 'Category',
     'description': "It is real estate app",
-    # data files always loaded at installation
     'data': [
         'security/ir.model.access.csv',
         'security/estate_property_security.xml',
@@ -17,7 +16,6 @@
         'views/property_offer_wizard.xml',
         'views/estate_property_template.xml'
     ],
-    # data files containing optionally loaded demonstration data
     'installable': True,
     'application': True,
     'auto_install': False,
