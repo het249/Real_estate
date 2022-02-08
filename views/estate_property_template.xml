@@ -21,7 +21,6 @@
                     <t t-set="sequence" t-value="0"/>
                     <t t-foreach="properties" t-as="property">
                         <t t-set="sequence" t-value="sequence + 1"/>
-                        <!-- <tr t-att-class="sequence % 2 == 0 and 'o_even' or ''"> -->
                         <tr t-attf-style="font-weight: bold;#{sequence % 2 == 0 and 'background: grey;' or ''}">
                             <td><t t-out="sequence" /></td>
                             

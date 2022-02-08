@@ -14,7 +14,9 @@
         'views/inherited_user_view.xml',
         'views/inherited_partner_view.xml',
         'views/property_offer_wizard.xml',
-        'views/estate_property_template.xml'
+        'views/estate_property_template.xml',
+        'reports/estate_property_reports.xml',
+        'reports/estate_property_templates.xml'
     ],
     'installable': True,
     'application': True,

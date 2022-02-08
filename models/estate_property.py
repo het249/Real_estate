@@ -61,11 +61,7 @@ class EstateProperyOffer(models.Model):
 
     
 
-    _sql_constraints = [
-    #    ('check_expected_price', 'CHECK(expected_price >= 0)', 'Expected price must not be negative.'),
-    #    ('check_selling_price', 'CHECK(selling_price >= 0)', 'Selling price must not be negative.'),
-    #    ('check_offer_price', 'CHECK(price >= 0)', '')
-    ]
+    #_sql_constraints = []
 
 ## property tag --model
 class EstatePropery(models.Model):
