@@ -16,7 +16,8 @@
         'views/property_offer_wizard.xml',
         'views/estate_property_template.xml',
         'reports/estate_property_reports.xml',
-        'reports/estate_property_templates.xml'
+        'reports/estate_property_templates.xml',
+        'data/property_template.xml'
     ],
     'installable': True,
     'application': True,

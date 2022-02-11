@@ -10,7 +10,7 @@
         <field name="name">calender</field>
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
-            <calendar color="name" string="Property Available" date_start="date_availability" mode="month">
+            <calendar string="Property Available" date_start="date_availability" mode="month">
                 <field name="name"/>
                 <field name="date_availability"/>   
             </calendar>

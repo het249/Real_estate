@@ -14,3 +14,6 @@ models = xmlrpc.client.ServerProxy('http://localhost:8069/xmlrpc/2/object')
 
 #models.execute_kw(db, uid, password, 'estate.property', 'create', [{'name': 'Avsar party plot', 'expected_price':108000000,'state': 'new'}])
 #print("record created :-)")
+
+results = models.execute_kw(db, uid, password, 'estate.property', 'search_read', [[],['name']])
+print(results)

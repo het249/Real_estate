@@ -37,6 +37,7 @@
                                     <td>
                                         <span t-field="offer.date_deadline"/>
                                     </td>
+                                    
                                     <td>
                                         <span t-field="offer.status"/>
                                     </td>
