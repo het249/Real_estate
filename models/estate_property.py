@@ -59,17 +59,22 @@ class EstateProperyOffer(models.Model):
     date_deadline = fields.Date(compute="_compute_date_deadline", inverse="_inverse_date_deadline")
     validity = fields.Integer()
 
-    
-
     #_sql_constraints = []
 
 ## property tag --model
-class EstatePropery(models.Model):
+class EstateProperyTag(models.Model):
     _name = "estate.property.tag"
     _description = "estate properties tags"
     _order = "name"
     
     name = fields.Char(required=True)
+
+class EstatePropertyImages(models.Model):
+    _name = "estate.property.images"
+    _description = "estate properties images"
+
+    property_id = fields.Many2one('estate.property')
+    image = fields.Binary()
 
 ## property --model
 class EstateProperty(models.Model):
@@ -119,12 +124,15 @@ class EstateProperty(models.Model):
     name = fields.Char(string='Title', required=True)
     property_type_id = fields.Many2one('estate.property.type')
     description = fields.Text(default=_get_description)
-    image = fields.Binary()
+    #image = fields.Binary()
+    image_ids = fields.One2many('estate.property.images','property_id')
     postcode = fields.Char()
     date_availability = fields.Date(string='Available from', default=fields.Date.today(), copy=False)
     expected_price = fields.Float(required=True)
     selling_price = fields.Float(readonly=True, copy=False)
-    bedrooms =fields.Integer(default=2)
+    bedrooms =fields.Integer(default=1)
+    bathrooms =fields.Integer(default=1)
+    kitchen =fields.Integer(default=1)
     living_area = fields.Integer()
     facades = fields.Integer()
     garage = fields.Boolean()
@@ -172,4 +180,3 @@ class EstateProperty(models.Model):
     #    ('check_selling_price', 'CHECK(selling_price >= 0)', 'Selling price must not be negative.'),
 
     #]
-

@@ -16,10 +16,22 @@
                 <field name="property_type_id"/>
                 <field name="postcode"/>
                 <field name="bedrooms"/>
+                <field name="bathrooms"/>
                 <field name="living_area"/>
                 <field name="expected_price"/>
                 <field name="selling_price"/>
                 <field name="date_availability"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="estate_property_images_view_tree" model="ir.ui.view">
+        <field name="name">Property tree</field>
+        <field name="model">estate.property.images</field>
+        <field name="arch" type="xml">
+            <tree string="Images">
+                <field name="property_id"/>
+                <field name="image" widget="image"/>
             </tree>
         </field>
     </record>
@@ -36,8 +48,8 @@
                                 <strong><field name="name"/></strong>
                                 <ul>
                                     <li><field name="tag_ids"/></li>
-                                    <li><field name="expected_price"/></li>
-                                    <li><field name="selling_price"/></li>
+                                    <li>Expected price: <field name="expected_price"/></li>
+                                    <li>Selling price: <field name="selling_price"/></li>
                                 </ul>
                                 <button class="btn btn-primary" name="open_offer" type="object" >
                                     <span>Confirm Offer</span>
@@ -69,7 +81,7 @@
                     <br/>
                     <group>
                         <group>
-                            <field name="image" widget="image"/>
+                            <field name="image_ids" widget="many2many_kanban"/>
                             <field name="property_type_id"/>
                             <field name="postcode"/>
                             <field name="date_availability"/>
@@ -85,6 +97,8 @@
                             <group>
                                 <field name="description"/>
                                 <field name="bedrooms"/>
+                                <field name="bathrooms"/>
+                                <field name="kitchen"/>
                                 <field name="living_area"/>
                                 <field name="facades"/>
                                 <field name="garage"/>

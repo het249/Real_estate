@@ -8,8 +8,10 @@
 
     <template id="dynamic_template">
         <t t-call="website.layout">
+        <center><h4><strong>Hello <t t-out="user.name"/></strong></h4></center>
         <div><t t-out="SomeAdditionalData"/></div>
         <div class="table">
+            <center>
             <table>
                 <thead>
                     <th>No.</th>
@@ -23,7 +25,6 @@
                         <t t-set="sequence" t-value="sequence + 1"/>
                         <tr t-attf-style="font-weight: bold;#{sequence % 2 == 0 and 'background: grey;' or ''}">
                             <td><t t-out="sequence" /></td>
-                            
                             <td>
                                 <a t-attf-href="/property/#{property.id}">
                                     <t t-out="property.name" />
@@ -38,32 +39,97 @@
                     </t>
                 </tbody>
             </table>
+            </center>
         </div>
         </t>
     </template>
 
     <template id="hello_template_user" name="hello template user">
-            <center><h4><strong>Hello <t t-out="user.name"/></strong></h4></center>
             <t t-call="Real_estate.dynamic_template">
             </t>
     </template>
 
-
+    <template id="property_details_css" name="property details css">
+        <style>
+            .container0{
+                width: 100%;
+                display: flex;
+                padding: 20px;
+                justify-content: center;
+            }
+            .container_left{
+                width:40%;
+                display:flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .container_right{
+                width:40%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+            }
+            .container_right>div{
+                max-width: max-content;
+            }
+        </style>
+    </template>
 
     <template id="property_details" name="property_details">
+        <t t-call="Real_estate.property_details_css"/>
+        
         <div t-call="website.layout">
-            <div class="container">
-                <div class="row">
-                    <div class="col-4">
-                        <div t-attf-style="padding-top: 50%; background-image: url(/Real_estate/static/image/#{property.image}); background-size: cover; background-position:center"/>
+            <div class="container0">
+                <div class="container_left">
+                        <t t-set="sequence0" t-value="1"/>
+                        <img src="/Real_estate/static/src/img/left_arrow.png" width="64px" height="64px" onclick="slide_img_left()"/>
+                        <t t-foreach="property.image_ids" t-as="prop_image">
+                            <div t-attf-id="property-image-#{sequence0}" style="display:none;">
+                                <img t-attf-src="data:image/jpg;base64,#{prop_image.image}" style="padding:50px -32px;" width="400px" height="auto"/>
+                            </div>
+                            <t t-set="sequence0" t-value="sequence0 + 1"/>
+                        </t>
+                        <img src="/Real_estate/static/src/img/right_arrow.png" width="64px" height="64px" onclick="slide_img_right()"/>
+                        <span id="totalImageNo" style="display:none"><t t-esc="sequence0 - 1"/></span>
+                </div>
+                <script>
+                    let current_image;
+                    const total_image = parseInt(document.getElementById("totalImageNo").innerHTML);
+                    if (total_image>0){
+                        current_image=1;
+                        document.getElementById("property-image-"+current_image).style="display:block";
+                    }
+                    const slide_img_right = () => {
+                        document.getElementById("property-image-"+current_image).style="display:none";
+                        if(current_image+1>total_image){
+                            current_image=1;
+                            document.getElementById("property-image-"+current_image).style="display:block";
+                        }
+                        else{
+                            current_image++;
+                            document.getElementById("property-image-"+current_image).style="display:block";
+                        }
+                    }
+                    const slide_img_left = () => {
+                        document.getElementById("property-image-"+current_image).style="display:none";
+                        if(current_image==1){
+                            current_image=total_image;
+                            document.getElementById("property-image-"+current_image).style="display:block";
+                        }
+                        else{
+                            current_image--;
+                            document.getElementById("property-image-"+current_image).style="display:block";
+                        }
+                    }
+                </script>
+                <div class="container_right">
+                    <center>
                         <div>
-                            <div>Property State</div>
-                            <div t-field="property.state"/>
+                            <div class="font-weight-bold"><span t-field="property.name"/></div>
+                            <div><b>Property State:</b> <t t-out="property.state"/></div>
+                            <div><b>Best Offer:</b> <span t-out="property.best_price"/></div>
                         </div>
-                    </div>
-                    <div class="col-8 o_property_details">
-                        <div class="text-center font-weight-bold"><span t-field="property.name"/></div>
-                    </div>
+                    </center>
                 </div>
             </div>
         </div>
