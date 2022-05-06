@@ -51,6 +51,9 @@
 
     <template id="property_details_css" name="property details css">
         <style>
+            * {
+                box-sizing: border-box;
+            }
             .container0{
                 width: 100%;
                 display: flex;
@@ -71,6 +74,69 @@
             }
             .container_right>div{
                 max-width: max-content;
+            }
+
+            .openOfferBtn {
+                display: flex;
+                justify-content: left;
+            }
+            .openOfferButton {
+                border: none;
+                border-radius: 5px;
+                background-color: #1c87c9;
+                color: white;
+                padding: 14px 20px;
+                cursor: pointer;
+                position: fixed;
+            }
+            .offerPopup {
+                position: relative;
+                text-align: center;
+                width: 100%;
+            }
+            .offerFormPopup {
+                display: none;
+                position: fixed;
+                left: 45%;
+                top: 5%;
+                transform: translate(-50%, 5%);
+                border: 3px solid #999999;
+                z-index: 9;
+            }
+            .offerFormContainer {
+                max-width: 300px;
+                padding: 20px;
+                background-color: #fff;
+            }
+            .offerFormContainer input[type=text],
+            .offerFormContainer input[type=password] {
+                width: 100%;
+                padding: 15px;
+                margin: 5px 0 20px 0;
+                border: none;
+                background: #eee;
+            }
+            .offerFormContainer input[type=text]:focus,
+            .offerFormContainer input[type=number]:focus {
+                background-color: #ddd;
+                outline: none;
+            }
+            .offerFormContainer .btn {
+                padding: 12px 20px;
+                border: none;
+                background-color: #8ebf42;
+                color: #fff;
+                cursor: pointer;
+                width: 100%;
+                margin-bottom: 15px;
+                opacity: 0.8;
+            }
+            .offerFormContainer .cancel {
+                background-color: #cc0000;
+            }
+            .offerFormContainer .btn:hover,
+            .openOfferButton:hover {
+                opacity: 1;
             }
         </style>
     </template>
@@ -121,6 +187,14 @@
                             document.getElementById("property-image-"+current_image).style="display:block";
                         }
                     }
+
+                    function openOfferForm() {
+                        document.getElementById("popupFormOffer").style.display = "block";
+                    }
+                    function closeOfferForm() {
+                        document.getElementById("popupFormOffer").style.display = "none";
+                    }
+                    
                 </script>
                 <div class="container_right">
                     <center>
@@ -128,6 +202,26 @@
                             <div class="font-weight-bold"><span t-field="property.name"/></div>
                             <div><b>Property State:</b> <t t-out="property.state"/></div>
                             <div><b>Best Offer:</b> <span t-out="property.best_price"/></div>
+                        </div>
+                        <div class="openOfferBtn">
+                            <button class="openOfferButton" onclick="openOfferForm()"><strong>Open Form</strong></button>
+                        </div>
+                        <div class="offerPopup">
+                            <div class="offerFormPopup" id="popupFormOffer">
+                                <form t-attf-action="/offer_confirm_mail/#{property.id}" class="offerFormContainer" method="post">
+                                    <h2>Send Offer</h2>
+                                    <label for="email">
+                                        <strong>E-mail</strong>
+                                    </label>
+                                    <input type="text" placeholder="Your Email" name="email" required="true"/>
+                                    <label for="price">
+                                        <strong>Offer Price</strong>
+                                    </label>
+                                    <input type="number" placeholder="offer price" name="offerPrice" required="true"/>
+                                    <button type="submit" class="btn">Send</button>
+                                    <button type="button" class="btn cancel" onclick="closeOfferForm()">Close</button>
+                                </form>
+                            </div>
                         </div>
                     </center>
                 </div>

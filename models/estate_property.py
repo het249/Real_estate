@@ -25,10 +25,18 @@ class EstateProperyOffer(models.Model):
         for record in self:
             if record.create_date:
                 record.date_deadline = record.create_date + timedelta(days=record.validity)
-
+    
+    @api.model
+    def create(self, vals):
+        new_offer = super(EstateProperyOffer, self).create(vals)
+        for record in new_offer:
+            record.property_id.state='offer received'
+            print('###############################',record.property_id.state)
+        return new_offer
+    
     def _inverse_date_deadline(self):
         #print("Recordset data",self)
-        for record in self:
+        for record in self: 
             record.validity = int((record.date_deadline - (record.create_date).date()).days)
 
     def action_accepted(self):
@@ -38,12 +46,14 @@ class EstateProperyOffer(models.Model):
             record.status='accepted'
             record.property_id.selling_price=record.price
             record.property_id.buyer_id=record.partner_id
+            record.property_id.state = 'offer accepted'
     
     def action_refused(self):
         for record in self:
             #if record.status =='sold':
             #    raise UserError("Sold property cannot be cancel")
             record.status='refused'
+
 
     @api.constrains('property_id.selling_price')
     def check_selling_price(self):
@@ -58,6 +68,9 @@ class EstateProperyOffer(models.Model):
 
     date_deadline = fields.Date(compute="_compute_date_deadline", inverse="_inverse_date_deadline")
     validity = fields.Integer()
+    active = fields.Boolean(default=True)
+    confirm_token = fields.Integer()
+    prop_state = fields.Selection(related='property_id.state')
 
     #_sql_constraints = []
 
@@ -106,6 +119,7 @@ class EstateProperty(models.Model):
         else:
             self.garden_area = None
             self.garden_orientation = None
+
     """
     @api.constrains('selling_price')
     def _check_selling_price(self):
@@ -140,9 +154,10 @@ class EstateProperty(models.Model):
     garden_area = fields.Integer()
     garden_orientation = fields.Selection(selection=[('north', 'North'), ('south', 'South'), ('east','East'), ('west','West')])
     active = fields.Boolean(default=True)
-    state = fields.Selection(selection=[('new','New'),('offer received','Offer Received'),('offer accepted','Offer Accepted'),('sold','Sold'),('canceled','Canceled')], required=True, default='new', copy=False)
+    state = fields.Selection(selection=[('publish pending','Publish Pending'),('new','New'),('offer received','Offer Received'),('offer accepted','Offer Accepted'),('sold','Sold'),('canceled','Canceled')], required=True, default='new', copy=False)
 
-    buyer_id = fields.Many2one('res.partner',copy=False,domain=[('is_buyer','=',True)])
+    seller_id = fields.Many2one('res.partner',copy=False)
+    buyer_id = fields.Many2one('res.partner',copy=False)   
     salesperson_id = fields.Many2one('res.users', default=lambda self: self.env.user)
     tag_ids = fields.Many2many('estate.property.tag')
     offer_ids = fields.One2many('estate.property.offer','property_id')
@@ -158,12 +173,14 @@ class EstateProperty(models.Model):
             if record.status =='cancel':
                 raise UserError("Cancel property cannot be sold")
             record.status='sold'
+            record.state='sold'
     
     def action_cancel(self):
         for record in self:
             if record.status =='sold':
                 raise UserError("Sold property cannot be cancel")
             record.status='cancel'
+            record.state='canceled'
 
     def open_offer(self):
         print("#############################################",self.id)
@@ -174,6 +191,34 @@ class EstateProperty(models.Model):
             "target":"new",
             "domain":[('status','=','accepted'),('property_id','=',self.id)]
         }
+
+    def _state_changed_mail(self):
+        template_obj = self.env['mail.template'].sudo().search([('name','=','state change email')], limit=1)
+        receipt_list = [record.seller_id.email for record in self]
+        print("###########################",receipt_list)
+        body = template_obj.body_html
+        body=body.replace('--seller_name--',self.seller_id.name)
+        body=body.replace('--state_changed_to--',self.state)
+        if template_obj:
+            mail_values = {
+                'subject': template_obj.subject,
+                'body_html': body,
+                'email_to':';'.join(map(lambda x: x, receipt_list)),
+                'email_from': template_obj.email_from,
+            }
+        return self.env['mail.mail'].create(mail_values).send()
+    
+    def assign_to_me(self):
+        for record in self:
+            if record.salesperson_id.id == False:
+                record.salesperson_id = self.env.user
+        
+        create_and_send_email = self._state_changed_mail()
+    
+    def publish_property(self):
+        for record in self:
+            if record.state == 'publish pending':
+                record.state = 'new'
 
     #_sql_constraints = [
     #    ('check_expected_price', 'CHECK(expected_price >= 0)', 'Expected price must not be negative.'),

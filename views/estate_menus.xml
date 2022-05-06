@@ -8,4 +8,5 @@
     <menuitem id="property_tags_menu_action" parent="Setting_first_level_menu" action="property_tags_action"/>
     <menuitem id="My_property_level_menu" name="My Property" parent="estate_property_menu_root" />
     <menuitem id="my_property_first_level_menu" parent="My_property_level_menu" action="my_property_model_action"/>
+    <menuitem id="Property_not_published_action" parent="estate_property_menu_root" action="estate_property_not_published_action"/>
 </odoo>

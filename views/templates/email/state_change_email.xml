@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="state_change_email_template" model="mail.template">
+        <field name="name">state change email</field>
+        <field name="model_id" ref="model_estate_property"></field>
+        <field name="email_from">abc@xyz.com</field>
+        <!-- <field name="email_cc">${(self.env.user.login)|safe}</field> -->
+        <field name="subject">State of your property has been changed</field>
+        <field name="body_html" type="html">
+            <p><strong>Hello --seller_name-- </strong></p>
+            <p><strong>State changed to - <b>--state_changed_to--</b></strong></p>
+            
+        </field>
+    </record>
+</odoo>

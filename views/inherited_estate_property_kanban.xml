@@ -1,0 +1,46 @@
+<odoo>
+    <record id="estate_property_not_published_action" model="ir.actions.act_window">
+        <field name="name">Properties not published</field>
+        <field name="res_model">estate.property</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="context">{'search_default_state_not_published':1}</field>
+    </record>
+
+    <record id="estate_property_not_published_view_kanban" model="ir.ui.view">
+        <field name="name">Property_not_published kanban</field>
+        <field name="model">estate.property</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_details">
+                                <strong>Property ID: <field name="id"/></strong><br/>
+                                <strong><field name="name"/></strong>
+                                <ul>
+                                    <li>Expected price: <field name="expected_price"/></li>
+                                    <li>Selling price: <field name="selling_price"/></li>
+                                    <li>Sales-Person: <field name="salesperson_id" attrs="{'invisible': [('salesperson_id','=',False)] }"/></li>
+                                    <li>State: <field name="state"/></li>
+                                </ul>
+                                <button class="btn btn-primary" name="assign_to_me" type="object" attrs="{'invisible': [('salesperson_id','!=',False)] }">
+                                    <span>assign to me</span>
+                                </button>
+                                <button class="btn btn-primary" name="publish_property" type="object" attrs="{'invisible': ['|',('salesperson_id','=',False),('state','!=','publish pending')] }">
+                                    <span>Publish property</span>
+                                </button>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="estate_property_not_published_view_kanban1" model="ir.actions.act_window.view">
+           <field name="view_mode">kanban</field>
+           <field name="view_id" ref="estate_property_not_published_view_kanban" />
+           <field name="act_window_id" ref="estate_property_not_published_action" />
+    </record>
+
+</odoo>

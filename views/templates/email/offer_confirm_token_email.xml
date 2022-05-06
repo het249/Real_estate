@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="offer_confirm_token_email_template" model="mail.template">
+        <field name="name">offer confirm token email</field>
+        <field name="model_id" ref="model_estate_property"></field>
+        <field name="email_from">abc@xyz.com</field>
+        <!-- <field name="email_cc">${(self.env.user.login)|safe}</field> -->
+        <field name="subject">Your offer confirmation mail</field>
+        <field name="body_html" type="html">
+            <p><strong>Hello --offer_sender-- </strong></p>
+            <p><strong>you have send offer to a property</strong></p>
+            <p> please click below link to confirm.</p>
+            <a href='--confirm-token-link--'>click me</a>
+        </field>
+    </record>
+</odoo>

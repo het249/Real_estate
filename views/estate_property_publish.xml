@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="publish_propery_js" name="publish property js">
+        <script src="/Real_estate/static/src/js/publish_property.js"/>
+    </template>
+
+    <template id="publish_property_template" name="publish property template">
+        <t t-call="Real_estate.publish_propery_js"/>
+        <t t-call="website.layout">
+            <form method="post" action="/publish_property_rpc" enctype="multipart/form-data">
+                <input type="text" name="property_name" placeholder="Name"/><br/>
+                <input type="text" name="property_description" placeholder="Description"/><br/>
+                <input type="file" multiple="true" name="property_images" placeholder="Images"/><br/>
+                <input type="number" name="property_bedrooms" placeholder="Total bedrooms"/><br/>
+                <input type="number" name="property_bathrooms" placeholder="Total bathrooms"/><br/>
+                <input type="number" name="property_kitchen" placeholder="Total kitchen"/><br/>
+                <input type="number" name="property_livingarea" placeholder="Total leaving area"/><br/>
+                <input type="number" name="property_gardenarea" placeholder="Total garden area"/><br/>
+                <button id="submit_property">Submit</button>
+            </form>
+        </t>
+    </template>
+</odoo>
